@@ -1,13 +1,14 @@
 {
   "id": "/",
-  "name": "Phosphor Cam - ASCII Art Camera",
-  "short_name": "Phosphor Cam",
-  "description": "Real-time ASCII art camera with Matrix effects",
+  "name": "奶娃相机 — 实时创意滤镜相机",
+  "short_name": "奶娃相机",
+  "description": "将摄像头实时转化为奶娃 IP 字母拼图、字符画或表情镜像",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#00ff00",
+  "theme_color": "#000000",
   "orientation": "any",
+  "lang": "zh-CN",
   "icons": [
     {
       "src": "/icons/icon-192x192.webp",

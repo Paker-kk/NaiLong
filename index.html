@@ -1,143 +1,88 @@
 <!doctype html>
-<html lang="en" prefix="og: http://ogp.me/ns#">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#00ff00" />
+    <meta name="theme-color" content="#000000" />
 
     <!-- Primary Meta Tags -->
-    <title>Phosphor Cam - Real-Time ASCII Art Camera | Convert Camera to ASCII</title>
-    <meta name="title" content="Phosphor Cam - Real-Time ASCII Art Camera | Convert Camera to ASCII" />
-    <meta name="description" content="Transform your webcam into real-time ASCII art with Phosphor Cam. Free online ASCII camera converter with Matrix effects, 5 character sets, and high-quality image export. Works in Chrome, Firefox, Safari." />
-    <meta name="keywords" content="ASCII camera, ASCII art, ASCII converter, real-time ASCII, ASCII webcam, Matrix camera, text art camera, ASCII video, character art, terminal camera, retro camera, ASCII generator, webcam ASCII, live ASCII, ASCII effect, phosphor cam" />
-    <meta name="author" content="pshycodr" />
+    <title>奶娃相机 — 实时创意滤镜相机</title>
+    <meta name="title" content="奶娃相机 — 实时创意滤镜相机" />
+    <meta name="description" content="奶娃相机：将摄像头实时转化为奶娃 IP 字母拼图、字符画或表情镜像。免费在线工具，支持拍照与录像。" />
+    <meta name="keywords" content="奶娃相机,NaiWa Cam,ASCII相机,字符画,表情识别,创意滤镜,实时相机" />
+    <meta name="author" content="NaiWa Team" />
     <meta name="robots" content="index, follow" />
-    <meta name="language" content="English" />
+    <meta name="language" content="zh-CN" />
     <meta name="revisit-after" content="7 days" />
-    
-    <!-- Canonical URL  -->
-    <link rel="canonical" href="https://phosphor.pshycodr.me/" />
-    
-    <!-- Open Graph / Facebook -->
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://phosphor.pshycodr.me/" />
-    <meta property="og:title" content="Phosphor Cam - Real-Time ASCII Art Camera" />
-    <meta property="og:description" content="Transform your webcam into real-time ASCII art. Free online tool with Matrix effects, multiple character sets, and 4K export. Try it now!" />
-    <meta property="og:image" content="https://phosphor.pshycodr.me/assets/banner.png" />
-    <meta property="og:image:alt" content="Phosphor Cam ASCII Camera Interface" />
-    <meta property="og:site_name" content="Phosphor Cam" />
-    <meta property="og:locale" content="en_US" />
-    
+    <meta property="og:title" content="奶娃相机 — 实时创意滤镜相机" />
+    <meta property="og:description" content="将摄像头实时转化为奶娃 IP 字母拼图、字符画或表情镜像。免费在线工具。" />
+    <meta property="og:image" content="/assets/banner.png" />
+    <meta property="og:image:alt" content="奶娃相机界面截图" />
+    <meta property="og:site_name" content="奶娃相机" />
+    <meta property="og:locale" content="zh_CN" />
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://phosphor.pshycodr.me/" />
-    <meta name="twitter:title" content="Phosphor Cam - Real-Time ASCII Art Camera" />
-    <meta name="twitter:description" content="Transform your webcam into real-time ASCII art with Matrix effects. Free online tool!" />
-    <meta name="twitter:image" content="https://phosphor.pshycodr.me/assets/banner.png" />
-    <meta name="twitter:creator" content="@the_aroy" />
-    
-    <!-- Additional SEO Meta Tags -->
-    <meta name="application-name" content="Phosphor Cam" />
-    <meta name="apple-mobile-web-app-title" content="Phosphor Cam" />
+    <meta name="twitter:title" content="奶娃相机 — 实时创意滤镜相机" />
+    <meta name="twitter:description" content="将摄像头实时转化为奶娃 IP 字母拼图、字符画或表情镜像。" />
+    <meta name="twitter:image" content="/assets/banner.png" />
+
+    <!-- iOS PWA / Mobile -->
+    <meta name="application-name" content="奶娃相机" />
+    <meta name="apple-mobile-web-app-title" content="奶娃相机" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#00ff00" />
+    <meta name="theme-color" content="#000000" />
     <meta name="mobile-web-app-capable" content="yes" />
-    
+    <meta name="format-detection" content="telephone=no" />
+
     <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/favicon.webp" type="image/x-icon" />
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.webp" />
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.webp" />
     <link rel="apple-touch-icon" href="/assets/favicon.webp" />
-    
-    <!-- Preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
+
     <!-- Schema.org Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Phosphor Cam",
-      "alternateName": "ASCII Camera",
-      "url": "https://phosphor.pshycodr.me",
-      "logo": "https://phosphor.pshycodr.me/assets/favicon.webp",
-      "description": "Real-time ASCII art camera that transforms your webcam feed into retro terminal aesthetics. Features Matrix effects, multiple character sets, and high-quality image export.",
+      "name": "奶娃相机",
+      "alternateName": "NaiWa Cam",
+      "description": "将摄像头实时转化为奶娃 IP 字母拼图、字符画或表情镜像的在线创意相机工具。",
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "Web Browser",
       "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "USD"
+        "priceCurrency": "CNY"
       },
-      "creator": {
-        "@type": "Person",
-        "name": "pshycodr",
-        "url": "https://github.com/pshycodr"
-      },
-      "screenshot": "https://phosphor.pshycodr.me/demo/blocks-color.png",
       "featureList": [
-        "Real-time ASCII video conversion",
-        "60+ FPS performance",
-        "5 character sets (standard, simple, blocks, matrix, edges)",
-        "Adjustable resolution and font size",
-        "Color mode and invert options",
-        "High-quality 4K image export",
-        "Front and back camera support",
-        "Browser-based, no installation required"
+        "奶娃 IP 字母拼图模式",
+        "实时字符画渲染",
+        "AI 表情镜像",
+        "拍照与录像",
+        "前后摄像头切换",
+        "免安装，浏览器即用"
       ],
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "permissions": "camera"
     }
     </script>
-    
-    <!-- BreadcrumbList Schema -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [{
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://phosphor.pshycodr.me"
-      }]
-    }
-    </script>
-    
-    <!-- Software Application Schema -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Phosphor Cam",
-      "applicationCategory": "BrowserApplication",
-      "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "5",
-        "ratingCount": "1"
-      }
-    }
-    </script>
   </head>
   <body>
-    <!-- Noscript fallback  -->
     <noscript>
-      <div style="padding: 40px; text-align: center; font-family: monospace; background: #000; color: #0f0;">
-        <h1>Phosphor Cam - ASCII Art Camera</h1>
-        <p>Transform your webcam into real-time ASCII art with retro terminal aesthetics.</p>
-        <p><strong>JavaScript is required to run this application.</strong></p>
-        <p>Features: Real-time ASCII conversion, Matrix effects, 5 character sets, 4K export</p>
+      <div style="padding: 40px; text-align: center; font-family: system-ui, sans-serif; background: #000; color: #fff;">
+        <h1>奶娃相机</h1>
+        <p>将摄像头实时转化为奶娃 IP 字母拼图、字符画或表情镜像。</p>
+        <p><strong>本应用需要启用 JavaScript。</strong></p>
       </div>
     </noscript>
-    
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -6,37 +6,18 @@ interface HeaderProps extends ProcessingStats {
     height: number
 }
 
-function Header({ fps, renderTime, width, height }: HeaderProps) {
+function Header({ fps }: HeaderProps) {
     return (
-        <div className="fixed top-4 left-4 z-10  flex flex-col gap-2 max-w-[calc(100vw-100px)]">
-            <div className="flex items-center gap-2 rounded-lg bg-black/40 px-3 py-2 backdrop-blur-sm border border-green-500/30 shadow-lg">
-                <img
-                    src="/assets/logo.webp"
-                    alt="Phosphor Cam Logo"
-                    className="h-8 w-8 object-contain"
-                />
-                <h1 className="text-lg md:text-xl font-bold leading-none tracking-tight text-green-400">
-                    PHOSPHOR CAM
-                </h1>
+        <div className="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3 pointer-events-none safe-top">
+            {/* 左侧：品牌 */}
+            <div className="pointer-events-auto flex items-center gap-2">
+                <img src="/assets/logo.webp" alt="奶娃相机" className="h-7 w-7 object-contain" />
+                <h1 className="text-sm font-semibold text-white/80 tracking-wide">奶娃相机</h1>
             </div>
 
-            <div className="flex gap-3 text-[10px] md:text-xs font-mono text-green-400 bg-black/40 px-3 py-2 rounded-lg backdrop-blur-sm border border-green-500/30 shadow-lg">
-                <span className="flex items-center gap-1">
-                    <span className="opacity-60">FPS:</span>
-                    <span className="font-semibold">{Math.floor(fps)}</span>
-                </span>
-                <span className="text-green-600">|</span>
-                <span className="flex items-center gap-1">
-                    <span className="opacity-60">RENDER:</span>
-                    <span className="font-semibold">{Math.floor(renderTime)}ms</span>
-                </span>
-                <span className="text-green-600">|</span>
-                <span className="flex items-center gap-1">
-                    <span className="opacity-60">RES:</span>
-                    <span className="font-semibold">
-                        {width} × {height}
-                    </span>
-                </span>
+            {/* 右侧：性能指标（极简） */}
+            <div className="text-[10px] text-white/30 font-mono tabular-nums">
+                {Math.floor(fps)} FPS
             </div>
         </div>
     )

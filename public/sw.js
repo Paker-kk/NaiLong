@@ -1,131 +1,136 @@
-const CACHE_NAME = 'phosphor-cam-v1.0.1'
+// ===== 奶娃相机 Service Worker =====
+const CACHE_SHELL = 'naiwa-shell-v2.0.0'
+const CACHE_RUNTIME = 'naiwa-runtime-v2.0.0'
+const CACHE_MEDIAPIPE = 'naiwa-mediapipe-v1'
 
+// 壳资源：install 阶段预缓存
+const SHELL_ASSETS = [
+    '/',
+    '/index.html',
+    '/manifest.json',
+    '/assets/logo.webp',
+    '/assets/favicon.webp',
+    '/icons/icon-192x192.webp',
+    '/icons/icon-512x512.webp',
+]
+
+// ===== Install =====
 self.addEventListener('install', e => {
     e.waitUntil(
         caches
-            .open(CACHE_NAME)
-            .then(async cache => {
-                const impAssets = ['/', '/index.html', '/manifest.json']
-
-                try {
-                    await cache.addAll(impAssets)
-                } catch (error) {}
-
-                const optionalAssets = [
-                    '/assets/logo.webp',
-                    '/assets/favicon.webp',
-                    '/icons/icon-192x192.webp',
-                    '/icons/icon-512x512.webp',
-                ]
-
-                await Promise.allSettled(
-                    optionalAssets.map(async url => {
-                        try {
-                            return await cache.add(url)
-                        } catch (err) {
-                            console.warn(`failed to cache ${url}: `, err)
-                        }
-                    }),
-                )
-            })
-            .then(() => self.skipWaiting())
-            .catch(err => {
-                console.log('failed to install cache: ', err)
-            }),
+            .open(CACHE_SHELL)
+            .then(cache =>
+                Promise.allSettled(SHELL_ASSETS.map(url => cache.add(url).catch(() => {}))),
+            )
+            .then(() => self.skipWaiting()),
     )
 })
 
-self.addEventListener('activate', event => {
-    event.waitUntil(
+// ===== Activate — 清理旧版缓存 =====
+self.addEventListener('activate', e => {
+    const KEEP = [CACHE_SHELL, CACHE_RUNTIME, CACHE_MEDIAPIPE]
+    e.waitUntil(
         caches
             .keys()
-            .then(cacheNames => {
-                return Promise.all(
-                    cacheNames
-                        .filter(cacheName => cacheName !== CACHE_NAME)
-                        .map(cacheName => caches.delete(cacheName)),
-                )
-            })
-            .then(() => {
-                return self.clients.claim()
-            }),
+            .then(names =>
+                Promise.all(names.filter(n => !KEEP.includes(n)).map(n => caches.delete(n))),
+            )
+            .then(() => self.clients.claim()),
     )
 })
 
-self.addEventListener('fetch', event => {
-    const { request } = event
-    const url = new URL(request.url)
-
+// ===== Fetch =====
+self.addEventListener('fetch', e => {
+    const { request } = e
     if (request.method !== 'GET') return
 
-    if (url.protocol === 'chrome-extension:' || url.protocol === 'moz-extension:') {
+    const url = new URL(request.url)
+
+    // 忽略扩展协议
+    if (url.protocol === 'chrome-extension:' || url.protocol === 'moz-extension:') return
+
+    // 策略 1：MediaPipe WASM / 模型文件 → cache-first（大文件，只下一次）
+    if (
+        url.pathname.includes('mediapipe') ||
+        url.pathname.endsWith('.wasm') ||
+        url.pathname.endsWith('.task') ||
+        url.pathname.endsWith('.tflite')
+    ) {
+        e.respondWith(
+            caches.match(request).then(
+                cached =>
+                    cached ||
+                    fetch(request).then(res => {
+                        if (res.ok) {
+                            const clone = res.clone()
+                            caches.open(CACHE_MEDIAPIPE).then(c => c.put(request, clone))
+                        }
+                        return res
+                    }),
+            ),
+        )
         return
     }
 
-    if (
-        url.origin === 'https://fonts.googleapis.com' ||
-        url.origin === 'https://fonts.gstatic.com'
-    ) {
-        event.respondWith(
-            caches.match(request).then(cacheResponse => {
-                if (cacheResponse) return cacheResponse
-
-                return fetch(request)
-                    .then(res => {
-                        if (res.status === 200) {
-                            const resClone = res.clone()
-                            caches.open(CACHE_NAME).then(cache => {
-                                cache.put(request, resClone)
-                            })
-                        }
-
-                        return res
-                    })
-                    .catch(() => {
-                        console.warn('[SW] Font failed to load, continuing anyway')
-                        return new Response('', { status: 200 })
-                    })
-            }),
+    // 策略 2：导航请求（HTML）→ network-first（保证获取最新版本）
+    if (request.mode === 'navigate') {
+        e.respondWith(
+            fetch(request)
+                .then(res => {
+                    if (res.ok) {
+                        const clone = res.clone()
+                        caches.open(CACHE_SHELL).then(c => c.put(request, clone))
+                    }
+                    return res
+                })
+                .catch(() =>
+                    caches.match('/index.html').then(
+                        cached =>
+                            cached ||
+                            new Response('<h1>奶娃相机 — 离线</h1><p>请连接网络后刷新</p>', {
+                                status: 503,
+                                headers: { 'Content-Type': 'text/html; charset=utf-8' },
+                            }),
+                    ),
+                ),
         )
-    } else {
-        event.respondWith(
-            caches.match(request).then(cacheResponse => {
-                if (cacheResponse) return cacheResponse
-
-                return fetch(request)
-                    .then(res => {
-                        if (!res || res.status !== 200 || res.type === 'error') {
-                            return res
-                        }
-
-                        const resClone = res.clone()
-                        caches.open(CACHE_NAME).then(cache => {
-                            cache.put(request, resClone)
-                        })
-                        return res
-                    })
-                    .catch(() => {
-                        console.warn('[SW] Request failed to load')
-
-                        if (request.mode === 'navigate') {
-                            return caches.match('/index.html').then(res => {
-                                if (res) {
-                                    return res
-                                }
-
-                                return new Response('Offline - Please reload when connected', {
-                                    status: 503,
-                                    statusText: 'Service Unavailable',
-                                    headers: new Headers({
-                                        'Content-Type': 'text/plain',
-                                    }),
-                                })
-                            })
-                        }
-                    })
-            }),
-        )
+        return
     }
+
+    // 策略 3：带 hash 的静态资源（Vite 产物）→ cache-first（hash 变 = 新资源）
+    if (/\.[0-9a-f]{8,}\.(js|css|woff2?)$/i.test(url.pathname)) {
+        e.respondWith(
+            caches.match(request).then(
+                cached =>
+                    cached ||
+                    fetch(request).then(res => {
+                        if (res.ok) {
+                            const clone = res.clone()
+                            caches.open(CACHE_RUNTIME).then(c => c.put(request, clone))
+                        }
+                        return res
+                    }),
+            ),
+        )
+        return
+    }
+
+    // 策略 4：其余资源 → stale-while-revalidate
+    e.respondWith(
+        caches.match(request).then(cached => {
+            const fetchPromise = fetch(request)
+                .then(res => {
+                    if (res.ok) {
+                        const clone = res.clone()
+                        caches.open(CACHE_RUNTIME).then(c => c.put(request, clone))
+                    }
+                    return res
+                })
+                .catch(() => cached)
+
+            return cached || fetchPromise
+        }),
+    )
 })
 
 self.addEventListener('message', event => {

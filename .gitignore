@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# MediaPipe WASM（大文件，构建时从 node_modules 拷贝）
+public/mediapipe/wasm/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

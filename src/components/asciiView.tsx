@@ -32,15 +32,15 @@ const AsciiView = forwardRef<AsciiRendererHandle, AsciiViewProps>(
                 const scaleFactor = 4
                 const imageSpecs = {
                     height: canvasSize.height * scaleFactor,
-                    wdith: canvasSize.width * scaleFactor,
+                    width: canvasSize.width * scaleFactor,
                     fontSize: settings.fontSize * scaleFactor,
                 }
 
-                if (imageSpecs.height <= 0 || imageSpecs.wdith <= 0)
+                if (imageSpecs.height <= 0 || imageSpecs.width <= 0)
                     throw new Error('Invalid capture dimensions')
 
                 const tempCanvas = document.createElement('canvas')
-                tempCanvas.width = imageSpecs.wdith
+                tempCanvas.width = imageSpecs.width
                 tempCanvas.height = imageSpecs.height
 
                 const tempCtx = tempCanvas.getContext('2d', { alpha: false })
@@ -63,7 +63,7 @@ const AsciiView = forwardRef<AsciiRendererHandle, AsciiViewProps>(
                 const pixels = imageData.data
 
                 tempCtx.fillStyle = '#000000'
-                tempCtx.fillRect(0, 0, imageSpecs.wdith, imageSpecs.height)
+                tempCtx.fillRect(0, 0, imageSpecs.width, imageSpecs.height)
                 tempCtx.font = `${imageSpecs.fontSize}px 'Fira Code', monospace`
                 tempCtx.textBaseline = 'top'
 
@@ -277,7 +277,7 @@ const AsciiView = forwardRef<AsciiRendererHandle, AsciiViewProps>(
                         ref={videoRef}
                         height={'screen'}
                         width={'screen'}
-                        style={{ display: 'none' }}
+                        className="hidden"
                         playsInline
                         muted
                     />
