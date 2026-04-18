@@ -5,13 +5,13 @@ const CACHE_MEDIAPIPE = 'naiwa-mediapipe-v1'
 
 // 壳资源：install 阶段预缓存
 const SHELL_ASSETS = [
-    '/',
-    '/index.html',
-    '/manifest.json',
-    '/assets/logo.webp',
-    '/assets/favicon.webp',
-    '/icons/icon-192x192.webp',
-    '/icons/icon-512x512.webp',
+    './',
+    './index.html',
+    './manifest.json',
+    './assets/logo.webp',
+    './assets/favicon.webp',
+    './icons/icon-192x192.webp',
+    './icons/icon-512x512.webp',
 ]
 
 // ===== Install =====
@@ -84,7 +84,7 @@ self.addEventListener('fetch', e => {
                     return res
                 })
                 .catch(() =>
-                    caches.match('/index.html').then(
+                    caches.match('./index.html').then(
                         cached =>
                             cached ||
                             new Response('<h1>奶娃相机 — 离线</h1><p>请连接网络后刷新</p>', {

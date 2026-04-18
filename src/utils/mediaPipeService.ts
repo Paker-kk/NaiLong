@@ -58,13 +58,16 @@ export async function initFaceLandmarker(): Promise<FaceLandmarkerType> {
             // 动态导入 @mediapipe/tasks-vision（tree-shakable，仅在此刻拉取 WASM 和模型）
             const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision')
 
-            // WASM 文件：生产环境从 R2 加载，开发环境从本地 public/ 加载
-            const wasmBase = import.meta.env.VITE_MEDIAPIPE_WASM_BASE || '/mediapipe/wasm'
+            // WASM 文件：优先使用环境变量（R2等 CDN），回退到同源 public/ 目录
+            const wasmBase =
+                import.meta.env.VITE_MEDIAPIPE_WASM_BASE ||
+                import.meta.env.BASE_URL + 'mediapipe/wasm'
             const vision = await FilesetResolver.forVisionTasks(wasmBase)
 
             const landmarker = await FaceLandmarker.createFromOptions(vision, {
                 baseOptions: {
-                    modelAssetPath: '/mediapipe/models/face_landmarker.task',
+                    modelAssetPath:
+                        import.meta.env.BASE_URL + 'mediapipe/models/face_landmarker.task',
                     delegate: 'GPU',
                 },
                 runningMode: 'VIDEO',
